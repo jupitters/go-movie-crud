@@ -2,7 +2,9 @@ package main
 
 import (
 	"encoding/json"
+	"math/rand"
 	"net/http"
+	"strconv"
 
 	"github.com/gorilla/mux"
 )
@@ -25,7 +27,18 @@ func getMovie(w http.ResponseWriter, r *http.Request) {
 }
 
 func createMovie(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 
+	movie := Movie{}
+	err := json.NewDecoder(r.Body).Decode(&movie)
+	if err != nil {
+		json.NewEncoder(w).Encode(err)
+		return
+	}
+	movie.ID = strconv.Itoa(rand.Intn(100000))
+	movies = append(movies, movie)
+
+	json.NewEncoder(w).Encode(movies)
 }
 
 func updateMovie(w http.ResponseWriter, r *http.Request) {
@@ -42,4 +55,5 @@ func deleteMovie(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 	}
+	json.NewEncoder(w).Encode(movies)
 }
