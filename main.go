@@ -7,8 +7,9 @@ import (
 	"github.com/gorilla/mux"
 )
 
+var movies []Movie
+
 func main() {
-	movies := []Movie{}
 
 	r := mux.NewRouter()
 
